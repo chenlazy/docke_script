@@ -1,0 +1,27 @@
+version: "3.0"
+services:
+  mysql:
+    image: mysql:8.0.28
+    ports:
+      - "3306:3306"
+    container_name: mysql.8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123456
+      - TZ=Asia/Shanghai
+      - SET_CONTAINER_TIMEZONE=true
+      - CONTAINER_TIMEZONE=Asia/Shanghai
+      - MYSQL_USER=canal
+      - MYSQL_PASSWORD=canal
+    networks:
+      - mysql
+    volumes:
+      - /mydata/mysql/conf/my.cnf:/etc/mysql/conf.cnf
+      - /mydata/mysql/data:/var/lib/mysql
+      - /mydata/mysql/logs:/var/log/mysql
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - mysql-server /etc/mysql/conf.cnf
+
+networks:
+  mysql:
+    driver: bridge

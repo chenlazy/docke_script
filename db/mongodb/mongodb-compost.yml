@@ -1,0 +1,5 @@
+version: "3.0"
+services:
+  mongedb:
+    # 镜像地址,可以是配置的私服项目
+    image:
