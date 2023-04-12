@@ -1,0 +1,21 @@
+version: "3.0"
+services:
+  mongodb:
+    # 镜像地址,可以是配置的私服项目
+    container_name: mongo-single
+    image: mongo:latest
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: A15779972612a
+    # 端口映射主机端口
+    ports:
+      - "27017:27017"
+    # 自启动
+    restart: always
+    command:
+      - "--auth"
+    volumes:
+      - /Users/lazysheep/data/docker/mongo/data/db:/data/db
+      - /Users/lazysheep/data/docker/mongo/data/log:/var/log/mongodb
+      - /Users/lazysheep/data/docker/mongo/config:/etc/mongo
+
