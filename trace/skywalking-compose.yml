@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  skywalking-aop:
+    container_name: skywalking-oap-single
+    image: apache/skywalking-oap-server:latest
+    healthcheck:
+      test: [ "CMD-SHELL", "/skywalking/bin/swctl ch" ]
+      #间隔30秒发起一次请求
+      interval: 30s
+      timeout: 10s
+      #重试三次
+      retries: 3
+      #⾸次检测延迟时间
+      start_period: 10s
+    ports:
+      - "11800:11800"
+      - "12800:12800"
+    volumes:
+      - /Users/lazysheep/data/trace/
+    environment:
+      JAVA_OPTS: "-Xms2048m -Xmx2048m"
+      TZ: Asia/Shanghai
+
+  ui:
+    image: apache/skywalking-ui:latest
+    container_name: ui
+    depends_on:
+      skywalking-aop:
+        condition: service_healthy
+    links:
+      - skywalking-aop
+    ports:
+      - "8080:8080"
+    environment:
+      SW_OAP_ADDRESS: http://skywalking-aop:12800
+      SW_ZIPKIN_ADDRESS: http://skywalking-aop:9412
