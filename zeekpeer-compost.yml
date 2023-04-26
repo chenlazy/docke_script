@@ -1,0 +1,20 @@
+version: "3.0"
+services:
+  zookeeper:
+    restart: always
+    image: zookeeper:latest
+    ports:
+      - "2181:2181"
+    container_name: zookeeper
+    networks:
+      - zookeeper
+    volumes:
+      - /mydata/zookeeper/datalog:/datalog
+      - /mydata/zookeeper/data:/data
+      - /mydata/zookeeper/logs:/logs
+
+
+
+networks:
+  zookeeper:
+    driver: bridge

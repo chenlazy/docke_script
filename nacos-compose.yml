@@ -1,0 +1,23 @@
+version: "3.0"
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    container_name: nacos
+    restart: always
+    ports:
+      - "8848:8848"
+    env_file:
+      - /mydata/nacos/nacos-standlone-mysql.env
+    environment:
+      - "NACOS_JAVA_OPTS=-Xms512m -Xmx512m -Xmn256m"
+    volumes:
+      - /mydata/nacos/:/home/nacos/
+    command:
+      - nacos-server /home/nacos/
+    networks:
+      - nacos
+
+
+networks:
+  nacos:
+    driver: bridge

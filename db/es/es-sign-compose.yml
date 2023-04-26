@@ -1,7 +1,7 @@
 version: "3.0"
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    image: elasticsearch:7.17.0
     container_name: elasticsearch
     ports:
       - "9200:9200"
@@ -10,26 +10,30 @@ services:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
-      - /mydata/elasticsearch/config:/usr/share/elasticsearch/config
+      - /mydata/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - /mydata/elasticsearch/data:/usr/share/elasticsearch/data
       - /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+    networks:
+      - es7net
 
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.0
+    image: kibana:7.17.0
     container_name: kibana
     ports:
       - "5601:5601"
     environment:
-      - "discovery.type=single-node"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - ELASTICSEARCH_URL=http://localhost:9200
+      - ELASTICSEARCH_URL=http://101.35.201.48:9200
     volumes:
-      - /mydata/elasticsearch/kibana/config:/usr/share/kibana/config
+      - /mydata/elasticsearch/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
       - /mydata/elasticsearch/kibana/plugins:/usr/share/kibana/plugins
+    networks:
+      - es7net
       #等待es服务启动
     depends_on:
       - elasticsearch
 
-
-
+networks:
+  es7net:
+    driver: bridge
+    external: false

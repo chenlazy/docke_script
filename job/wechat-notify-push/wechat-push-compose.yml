@@ -1,0 +1,10 @@
+version: "3.0"
+services:
+  wechat-notify-push:
+    image: wechat-notify-push:1.0.0
+    container_name: wechat-notify-push
+    ports:
+      - "8099:8099"
+      - "9800:9800"
+    volumes:
+      - /home/server/job/wechat-notify-push/logs:/home/server/job/wechat-notify-push/logs
