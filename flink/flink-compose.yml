@@ -1,0 +1,32 @@
+  version: "3.8"
+  services:
+    flink-job-manager:
+      image: flink:latest
+      container_name: flink-job-manager
+      expose:
+        - "6123"
+      ports:
+        - "8081:8081"
+      command: flink-job-manager
+      volumes:
+        - /usr/local/flink/flink-docker/conf/job/flink-conf.yaml:/work/bigdata/flink/conf
+      environment:
+        - JOB_MANAGER_RPC_ADDRESS=flink-job-manager
+      restart: always
+    flink-task-manager:
+      image: flink:latest
+      container_name: flink-task-manager
+      expose:
+        - "6121"
+        - "6122"
+      depends_on:
+        - flink-job-manager
+      volumes:
+        - /usr/local/flink/flink-docker/conf/task/flink-conf.yaml:/work/bigdata/flink/conf
+      command:
+        - flink-task-manager
+      links:
+        - "flink-job-manager:flink-job-manager"
+      environment:
+        - JOB_MANAGER_RPC_ADDRESS=flink-job-manager
+      restart: always
