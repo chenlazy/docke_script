@@ -1,0 +1,11 @@
+apiVersion: v1
+#要创建的资源是 pod类型
+kind: pod
+#表示要创建pod的名称,唯一
+metadata:
+  name: nginx-pod
+#表示要运行的容器的名称和镜像名称,镜像默认来源 DockerHub。
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx

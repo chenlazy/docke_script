@@ -1,32 +1,38 @@
-  version: "3.8"
-  services:
-    flink-job-manager:
-      image: flink:latest
-      container_name: flink-job-manager
-      expose:
-        - "6123"
-      ports:
-        - "8081:8081"
-      command: flink-job-manager
-      volumes:
-        - /work/bigdata/flink/conf/job/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
-      environment:
-        - JOB_MANAGER_RPC_ADDRESS=flink-job-manager
-      restart: always
-    flink-task-manager:
-      image: flink:latest
-      container_name: flink-task-manager
-      expose:
-        - "6121"
-        - "6122"
-      depends_on:
-        - flink-job-manager
-      volumes:
-        - /work/bigdata/flink/conf/task/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
-      command:
-        - flink-task-manager
-      links:
-        - "flink-job-manager:flink-job-manager"
-      environment:
-        - JOB_MANAGER_RPC_ADDRESS=flink-job-manager
-      restart: always
+version: "3.8"
+services:
+  flink-job-manager:
+    image: flink:latest
+    container_name: flink-job-manager
+    expose:
+      - "6123"
+    ports:
+      - "8081:8081"
+    command: flink-job-manager
+    volumes:
+      - /Users/lazysheep/data/docker/flink/conf/job/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    restart: always
+    networks:
+      - jobmanager
+  flink-task-manager:
+    image: flink:latest
+    container_name: flink-task-manager
+    expose:
+      - "6121"
+      - "6122"
+    depends_on:
+      - flink-job-manager
+    volumes:
+      - /Users/lazysheep/data/docker/flink/conf/task/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
+    command:
+      - flink-task-manager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    restart: always
+    networks:
+      - jobmanager
+
+networks:
+  jobmanager:
+    driver: bridge
