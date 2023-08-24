@@ -9,7 +9,7 @@
         - "8081:8081"
       command: flink-job-manager
       volumes:
-        - /usr/local/flink/flink-docker/conf/job/flink-conf.yaml:/work/bigdata/flink/conf
+        - /work/bigdata/flink/conf/job/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
       environment:
         - JOB_MANAGER_RPC_ADDRESS=flink-job-manager
       restart: always
@@ -22,7 +22,7 @@
       depends_on:
         - flink-job-manager
       volumes:
-        - /usr/local/flink/flink-docker/conf/task/flink-conf.yaml:/work/bigdata/flink/conf
+        - /work/bigdata/flink/conf/task/flink-conf.yaml:/opt/flink/conf/flink-conf.yaml
       command:
         - flink-task-manager
       links:
