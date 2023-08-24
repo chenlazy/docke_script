@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+#表示创建的种类为 Deployment
+kind: Deployment
+#创建成功后的名称
+metadata:
+  name: xxl-job-deployment
+spec:
+  #部署的 pod 副本数量
+  replicas: 1
+  # 表示的是 deployment 资源和 pod 资源关联的方式
+  # 这里表示 deployment 会管理 (selector) 所有 labels=nginx 的 pod。
+  selector:
+    matchLabels:
+      app: xxl-job
+  # 用来定义 pod 资源
+  template:
+    #表明 pod 是被 deployment 管理
+    metadata:
+      labels:
+        app: xxl-job
+    spec:
+      containers:
+        - image: registry.cn-hangzhou.aliyuncs.com/su_wind/xxl-job:1.0.1
+          name: xxl-job
+
