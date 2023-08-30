@@ -3,26 +3,28 @@ kind: Service
 metadata:
   name: mysql
 spec:
+  type: ClusterIP
+  externalIPs:
+    - 192.168.49.2
   ports:
     - port: 3306
   selector:
     app: mysql
-  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-single
+  name: mysql
 spec:
   selector:
     matchLabels:
-      app: mysql-single
+      app: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql-single
+        app: mysql
     spec:
       containers:
         - image: mysql:8.0
@@ -40,3 +42,30 @@ spec:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
